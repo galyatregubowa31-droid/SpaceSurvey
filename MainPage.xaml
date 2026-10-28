@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SpaceSurvey.MainPage"
+             Padding="20">
+
+    <!-- Главный Grid с явно заданными строками и колонками -->
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="*" RowSpacing="15">
+        
+        <!-- Заголовок (1-й Label) -->
+        <Label Grid.Row="0" Grid.Column="0" 
+               Text="Анкета космонавта" 
+               FontSize="24" 
+               FontAttributes="Bold" 
+               HorizontalOptions="Center" />
+
+        <!-- ScrollView для прокрутки (как на вашем скрине) -->
+        <ScrollView Grid.Row="1" Grid.Column="0">
+            
+            <VerticalStackLayout Spacing="15">
+
+                <!-- 2-й Label -->
+                <Label Text="Введите ваши данные:" 
+                       FontSize="18" 
+                       FontAttributes="Italic" />
+
+                <!-- Entry 1: Имя (Keyboard: Text) -->
+                <Entry x:Name="NameEntry" 
+                       Placeholder="Ваше имя" 
+                       Keyboard="Text" 
+                       MaxLength="50" />
+
+                <!-- Entry 2: Возраст (Keyboard: Numeric) -->
+                <Entry x:Name="AgeEntry" 
+                       Placeholder="Ваш возраст" 
+                       Keyboard="Numeric" 
+                       MaxLength="3" />
+
+                <!-- Editor -->
+                <Editor x:Name="BioEditor"
+                        Placeholder="Расскажите о своих навыках..." 
+                        AutoSize="TextChanges" 
+                        MaxLength="200" 
+                        HeightRequest="100" />
+
+                <!-- Picker (минимум 3 варианта) -->
+                <Picker x:Name="PlanetPicker" 
+                        Title="Выберите планету назначения">
+                    <Picker.Items>
+                        <x:String>Марс</x:String>
+                        <x:String>Луна</x:String>
+                        <x:String>Венера</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <!-- RadioButton (3 в одной группе) -->
+                <Label Text="Опыт полетов:" FontAttributes="Bold" />
+                <HorizontalStackLayout Spacing="10">
+                    <RadioButton x:Name="RadioNo" Content="Нет" GroupName="FlightExperience" Value="0" />
+                    <RadioButton x:Name="RadioYes" Content="Да" GroupName="FlightExperience" Value="1" />
+                    <RadioButton x:Name="RadioMany" Content="Много" GroupName="FlightExperience" Value="2" />
+                </HorizontalStackLayout>
+
+                <!-- CheckBox (2 штуки) -->
+                <Label Text="Согласия:" FontAttributes="Bold" />
+                <HorizontalStackLayout Spacing="10">
+                    <CheckBox x:Name="TermsCheckBox" IsChecked="False" Color="Blue" />
+                    <Label Text="Согласен с правилами" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10">
+                    <CheckBox x:Name="HealthCheckBox" IsChecked="False" Color="Green" />
+                    <Label Text="Готов к перегрузкам" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!-- Switch -->
+                <HorizontalStackLayout Spacing="10">
+                    <Switch x:Name="ReadySwitch" IsToggled="False" OnColor="Red" />
+                    <Label Text="Готов к немедленному вылету" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <!-- DatePicker (минимум и максимум заданы) -->
+                <DatePicker x:Name="FlightDatePicker"
+                            Format="D"
+                            Date="2025-01-01"
+                            MinimumDate="2024-01-01"
+                            MaximumDate="2030-12-31" />
+
+                <!-- Slider (начальное значение 50, в диапазоне) -->
+                <Label Text="Уровень смелости (1-100):" />
+                <Slider x:Name="CourageSlider" 
+                        Minimum="1" 
+                        Maximum="100" 
+                        Value="50" />
+
+                <!-- Image -->
+                <Image Source="dotnet_bot.png" 
+                       Aspect="AspectFit" 
+                       HeightRequest="100" 
+                       HorizontalOptions="Center" />
+
+                <!-- Две кнопки в Grid для красоты -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                    <Button Grid.Column="0" Text="Показать результат" Clicked="OnShowResultClicked" />
+                    <Button Grid.Column="1" Text="Очистить" Clicked="OnClearClicked" />
+                </Grid>
+
+                <!-- Результат (с привязкой через x:Reference) -->
+                <!-- Привязка IsVisible к Switch: если переключатель включен, результат виден -->
+                <Label x:Name="ResultLabel" 
+                       Text="" 
+                       FontSize="16" 
+                       TextColor="DarkGreen"
+                       IsVisible="{Binding Source={x:Reference ReadySwitch}, Path=IsToggled, Mode=OneWay}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
